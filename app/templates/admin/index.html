@@ -34,6 +34,13 @@
                 {{ dashboard_option('Invite New User', 'admin.invite_user',
                                     description='Invites a new user to create their own account', icon='add user icon') }}
             </div>
+
+            <div class="ui two column stackable grid">
+                {{ dashboard_option('All Questions', 'admin.questions',
+                                    description='View and manage questions', icon='question icon') }}
+                {{ dashboard_option('Add New Question', 'admin.new_question',
+                                    description='Create a new question', icon='add icon') }}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="ui stackable grid container">
+        <div class="sixteen wide tablet twelve wide computer centered column">
+            <a class="ui basic compact button" href="{{ url_for('admin.index') }}">
+                <i class="caret left icon"></i>
+                Back to dashboard
+            </a>
+            <h2 class="ui header">
+                ALl Questions
+                <div class="sub header">
+                    View and manage current questions
+                </div>
+            </h2>
+
+            <div class="ui menu">
+                <div class="ui right search item" style="width:100%">
+                    <div class="ui transparent icon input">
+                        <input id="search-users" type="text" placeholder="Search questions…">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# Use overflow-x: scroll so that mobile views don't freak out
+             # when the table is too wide #}
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Max Rating</th>
+                            <th>Optional responses?</th>
+                            <th>Number of responses to question</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for q in questions | sort(attribute='content') %}
+                        <tr onclick="window.location.href = '{{ url_for('admin.question_info', question_id=q.id) }}';">
+
+                            <td>{{ q.content }}</td>
+                            <td>{{ q.max_rating }}</td>
+                            <td>{{ q.free_response|e }}</td>
+                            <td>{{ q.answers|length }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search-users').keyup(function () {
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
+                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
+                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
+                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                } else {
+                    $('td.positive').removeClass('positive');
+                    $('tr.hidden').removeClass('hidden').show();
+                }
+            });
+        });
+    </script>
+{% endblock %}

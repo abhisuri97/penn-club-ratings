@@ -6,4 +6,5 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(1000))
     max_rating = db.Column(db.Integer)
-    answers = db.relationship("Answer", backref="parent")
+    free_response = db.Column(db.Boolean, default=False)
+    answers = db.relationship("Answer", backref="question")
