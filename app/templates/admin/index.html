@@ -36,10 +36,16 @@
             </div>
 
             <div class="ui two column stackable grid">
-                {{ dashboard_option('All Questions', 'admin.questions',
+                {{ dashboard_option('All Questions', 'question.questions',
                                     description='View and manage questions', icon='question icon') }}
-                {{ dashboard_option('Add New Question', 'admin.new_question',
+                {{ dashboard_option('Add New Question', 'question.new_question',
                                     description='Create a new question', icon='add icon') }}
+            </div>
+            <div class="ui two column stackable grid">
+                {{ dashboard_option('All Clubs', 'club.clubs',
+                                    description='View and manage clubs', icon='list icon') }}
+                {{ dashboard_option('Add New Club', 'club.new_club',
+                                    description='Create a new club', icon='add icon') }}
             </div>
         </div>
     </div>

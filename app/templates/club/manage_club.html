@@ -1,18 +1,18 @@
 {% extends 'layouts/base.html' %}
 {% import 'macros/form_macros.html' as f %}
 
-{% set deletion_endpoint = 'admin.delete_question_request' %}
+{% set deletion_endpoint = 'club.delete_club_request' %}
 
 {% set endpoints = [
-    ('admin.question_info', 'Question information'),
-    ('admin.change_question_details', 'Change question details'),
-    (deletion_endpoint, 'Delete question')
+    ('club.club_info', 'Question information'),
+    ('club.change_club_details', 'Change club details'),
+    (deletion_endpoint, 'Delete club')
 ] %}
 
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
         {% for route, name in items %}
-            {% set href = url_for(route, question_id=question.id) %}
+            {% set href = url_for(route, club_id=club.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
                 {{ name }}
             </a>
@@ -20,28 +20,27 @@
     </div>
 {% endmacro %}
 
-{% macro question_info(question) %}
+{% macro club_info(club) %}
     <table class="ui compact definition table">
-      <tr><td>Content</td><td>{{ question.content }}</td></tr>
-      <tr><td>Max Rating</td><td>{{ question.max_rating }}</td></tr>
-      <tr><td>Optional Response?</td><td>{{ question.free_response|e }}</td></tr>
+      <tr><td>Name</td><td>{{ club.name }}</td></tr>
+      <tr><td>Categories</td><td>{% for c in club.categories %} {{ c.category_name }} {% endfor %}</td></tr>
       <div style="overflow-x: scroll;">
         <table class="ui searchable sortable unstackable selectable celled table">
           <thead>
             <tr>
               <th>Answer</th>
               <th>Rating</th>
-              <th>Club</th>
+              <th>Question</th>
               <th>Delete?</th>
             </tr>
           </thead>
           <tbody>
-            {% for a in answers | sort(attribute='id') %}
+            {% for a in club.answers | sort(attribute='id') %}
               <td>{{ a.answer }}</td>
               <td>{{ a.rating }}</td>
-              <td>{{ a.club.name }}</td>
-              <td onclick="window.location.href = '{{ url_for('admin.delete_answer', answer_id=a.id) }}';">
-                <a>Delete Question</a></td>
+              <td>{{ a.question.content }}</td>
+              <td onclick="window.location.href = '{{ url_for('question.delete_answer', answer_id=a.id) }}';">
+                <a>Delete Answer</a></td>
               </tr>
             {% endfor %}
           </tbody>
@@ -55,13 +54,13 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <a class="ui basic compact button" href="{{ url_for('admin.questions') }}">
+            <a class="ui basic compact button" href="{{ url_for('club.clubs') }}">
                 <i class="caret left icon"></i>
-                Back to all questions
+                Back to all clubs
             </a>
             <h2 class="ui header">
-                {{ question.content }}
-                <div class="sub header">View and manage this question.</div>
+                {{ club.content }}
+                <div class="sub header">View and manage this club.</div>
             </h2>
         </div>
         <div class="stretched divided very relaxed row">
@@ -75,8 +74,8 @@
                         <div class="content">
                             This action is permanent
                             <div class="sub header">
-                                Deleting a question is not a reversible change. Any information associated
-                                with this question will be removed, and cannot be recovered.
+                                Deleting a club is not a reversible change. Any information associated
+                                with this club will be removed, and cannot be recovered.
                             </div>
                         </div>
                     </h3>
@@ -89,14 +88,14 @@
                             </div>
                         </div>
                         <a class="ui disabled negative deletion button">
-                            Delete this question
+                            Delete this club
                         </a>
                     </div>
                     </div>
                 {% elif form %}
                     {{ f.render_form(form) }}
                 {% else %}
-                    {{ question_info(question) }}
+                    {{ club_info(club) }}
                 {% endif %}
             </div>
         </div>
@@ -106,7 +105,7 @@
         $('.deletion.checkbox').checkbox({
             onChecked: function() {
                 $('.deletion.button').removeClass('disabled')
-                        .attr('href', '{{ url_for('admin.delete_question', question_id=question.id) }}');
+                        .attr('href', '{{ url_for('club.delete_club', club_id=club.id) }}');
             },
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');

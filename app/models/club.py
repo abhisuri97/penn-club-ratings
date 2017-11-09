@@ -12,7 +12,7 @@ class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1000))
     categories = db.relationship('ClubCategory', secondary=club_category_assoc, backref='clubs')
-    answer = db.relationship('Answer', backref='club')
+    answers = db.relationship('Answer', backref='club')
 
 
 class ClubCategory(db.Model):

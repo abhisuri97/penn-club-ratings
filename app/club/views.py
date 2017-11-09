@@ -1,0 +1,87 @@
+from flask import abort, flash, redirect, render_template, url_for
+from flask_login import login_required
+
+from .forms import (NewClubForm)
+from . import club
+from .. import db
+from ..decorators import admin_required
+from ..models import Club
+
+
+@club.route('/new-club', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def new_club():
+    """Create a new club."""
+    form = NewClubForm()
+    if form.validate_on_submit():
+        club = Club(
+            name=form.name.data,
+            categories=form.categories.data)
+        db.session.add(club)
+        db.session.commit()
+        flash('Club {} successfully created'.format(club.name),
+              'form-success')
+    return render_template('club/new_club.html', form=form)
+
+
+@club.route('/clubs')
+@login_required
+@admin_required
+def clubs():
+    """View all registered users."""
+    clubs = Club.query.all()
+    return render_template(
+        'club/clubs.html', clubs=clubs)
+
+
+@club.route('/<int:club_id>')
+@club.route('/<int:club_id>/info')
+@login_required
+@admin_required
+def club_info(club_id):
+    """View a club."""
+    club = Club.query.filter_by(id=club_id).first()
+    return render_template('club/manage_club.html', club=club)
+
+
+@club.route('/<int:club_id>/change-club-details', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def change_club_details(club_id):
+    club = Club.query.filter_by(id=club_id).first()
+    if club is None:
+        abort(404)
+    form = NewClubForm()
+    if form.validate_on_submit():
+        club.name = form.name.data
+        club.categories = form.categories.data
+        db.session.add(club)
+        db.session.commit()
+        flash('Club successfully edited', 'form-success')
+    form.name.data = club.name
+    form.categories.data = club.categories
+    return render_template('club/manage_club.html', club=club, form=form)
+
+
+@club.route('/<int:club_id>/delete')
+@login_required
+@admin_required
+def delete_club_request(club_id):
+    """Request deletion of a club"""
+    club = Club.query.filter_by(id=club_id).first()
+    if club is None:
+        abort(404)
+    return render_template('club/manage_club.html', club=club)
+
+
+@club.route('/<int:club_id>/_delete')
+@login_required
+@admin_required
+def delete_club(club_id):
+    """Delete a club."""
+    club = Club.query.filter_by(id=club_id).first()
+    db.session.delete(club)
+    db.session.commit()
+    flash('Successfully deleted club %s.' % club.content, 'success')
+    return redirect(url_for('club.clubs'))

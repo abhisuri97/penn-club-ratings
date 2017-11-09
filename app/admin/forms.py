@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.fields import PasswordField, StringField, SubmitField, IntegerField, SelectField
+from wtforms.fields import PasswordField, StringField, SubmitField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
@@ -56,10 +56,3 @@ class NewUserForm(InviteUserForm):
     password2 = PasswordField('Confirm password', validators=[InputRequired()])
 
     submit = SubmitField('Create')
-
-
-class NewQuestionForm(Form):
-    content = StringField('Please input the text of the question')
-    max_rating = IntegerField('Please input the maximum on a scale of 1 to maximum you want this question to be rated out of')
-    free_response = SelectField('Allow an optional response?', choices=[('True', 'Yes'), ('False', 'No')])
-    submit = SubmitField('Create Question')

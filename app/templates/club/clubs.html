@@ -8,9 +8,9 @@
                 Back to dashboard
             </a>
             <h2 class="ui header">
-                ALl Questions
+                All Clubs
                 <div class="sub header">
-                    View and manage current questions
+                    View and manage current clubs
                 </div>
             </h2>
 
@@ -29,20 +29,16 @@
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
-                            <th>Question</th>
-                            <th>Max Rating</th>
-                            <th>Optional responses?</th>
-                            <th>Number of responses to question</th>
+                            <th>Club Name</th>
+                            <th>Categories</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for q in questions | sort(attribute='content') %}
-                        <tr onclick="window.location.href = '{{ url_for('admin.question_info', question_id=q.id) }}';">
+                    {% for c in clubs %}
+                        <tr onclick="window.location.href = '{{ url_for('club.club_info', club_id=c.id) }}';">
 
-                            <td>{{ q.content }}</td>
-                            <td>{{ q.max_rating }}</td>
-                            <td>{{ q.free_response|e }}</td>
-                            <td>{{ q.answers|length }}</td>
+                            <td>{{ c.name }}</td>
+                            <td>{% for c in c.categories %} {{ c.category_name }} {% endfor %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

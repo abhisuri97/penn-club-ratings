@@ -1,0 +1,116 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% set deletion_endpoint = 'question.delete_question_request' %}
+
+{% set endpoints = [
+    ('question.question_info', 'Question information'),
+    ('question.change_question_details', 'Change question details'),
+    (deletion_endpoint, 'Delete question')
+] %}
+
+{% macro navigation(items) %}
+    <div class="ui vertical fluid secondary menu">
+        {% for route, name in items %}
+            {% set href = url_for(route, question_id=question.id) %}
+            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro question_info(question) %}
+    <table class="ui compact definition table">
+      <tr><td>Content</td><td>{{ question.content }}</td></tr>
+      <tr><td>Max Rating</td><td>{{ question.max_rating }}</td></tr>
+      <tr><td>Optional Response?</td><td>{{ question.free_response|e }}</td></tr>
+      <div style="overflow-x: scroll;">
+        <table class="ui searchable sortable unstackable selectable celled table">
+          <thead>
+            <tr>
+              <th>Answer</th>
+              <th>Rating</th>
+              <th>Club</th>
+              <th>Delete?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in question.answers | sort(attribute='id') %}
+              <td>{{ a.answer }}</td>
+              <td>{{ a.rating }}</td>
+              <td>{{ a.club.name }}</td>
+              <td onclick="window.location.href = '{{ url_for('question.delete_answer', answer_id=a.id) }}';">
+                <a>Delete Answer</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </table>
+
+{% endmacro %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <a class="ui basic compact button" href="{{ url_for('question.questions') }}">
+                <i class="caret left icon"></i>
+                Back to all questions
+            </a>
+            <h2 class="ui header">
+                {{ question.content }}
+                <div class="sub header">View and manage this question.</div>
+            </h2>
+        </div>
+        <div class="stretched divided very relaxed row">
+            <div class="four wide column">
+                {{ navigation(endpoints) }}
+            </div>
+            <div class="eight wide column">
+                {% if request.endpoint == deletion_endpoint %}
+                    <h3 class="ui red block header">
+                        <i class="warning circle icon"></i>
+                        <div class="content">
+                            This action is permanent
+                            <div class="sub header">
+                                Deleting a question is not a reversible change. Any information associated
+                                with this question will be removed, and cannot be recovered.
+                            </div>
+                        </div>
+                    </h3>
+
+                    <div class="ui form">
+                        <div class="inline field">
+                            <div class="ui deletion checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden">
+                                <label>I understand that this action cannot be undone.</label>
+                            </div>
+                        </div>
+                        <a class="ui disabled negative deletion button">
+                            Delete this question
+                        </a>
+                    </div>
+                    </div>
+                {% elif form %}
+                    {{ f.render_form(form) }}
+                {% else %}
+                    {{ question_info(question) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $('.deletion.checkbox').checkbox({
+            onChecked: function() {
+                $('.deletion.button').removeClass('disabled')
+                        .attr('href', '{{ url_for('question.delete_question', question_id=question.id) }}');
+            },
+            onUnchecked: function() {
+                $('.deletion.button').addClass('disabled').removeAttr('href');
+            }
+        });
+    </script>
+{% endblock %}
