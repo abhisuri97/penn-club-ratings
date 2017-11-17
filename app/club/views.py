@@ -35,7 +35,8 @@ def new_club():
                             template='club/email/suggested_club', 
                             club=club, 
                             link=link)
-        flash('Club {} successfully {} {}'.format(club.name), 'form-success')
+        action = 'created' if current_user.is_admin() else 'suggested'
+        flash('Club {} successfully {}'.format(club.name, action), 'form-success')
     return render_template('club/new_club.html', form=form)
 
 

@@ -1,0 +1,10 @@
+Hi there,
+
+A user suggested a club with the name {{ club.name }}
+
+Click here to edit the settings/make the club showing public.
+
+{{ link }}
+
+From,
+The Team
