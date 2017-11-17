@@ -1,11 +1,13 @@
 from flask import abort, flash, redirect, render_template, url_for
 from flask_login import login_required, current_user
 
+from flask_rq import get_queue
+from ..email import send_email
 from .forms import (NewClubForm, EditClubForm)
 from . import club
 from .. import db
 from ..decorators import admin_required
-from ..models import Club
+from ..models import Club, User, Role
 from ..helpers import bool
 
 
@@ -22,6 +24,17 @@ def new_club():
             categories=form.categories.data)
         db.session.add(club)
         db.session.commit()
+        link = url_for('club.change_club_details', club_id=club.id)
+        if (current_user.is_admin() == False):
+            for r in Role.query.filter_by(name = 'Administrator').all():
+                for a in r.users:
+                    get_queue().enqueue(
+                            send_email,
+                            recipient=a.email,
+                            subject='A new club was suggested by {}'.format(current_user.first_name), 
+                            template='club/email/suggested_club', 
+                            club=club, 
+                            link=link)
         flash('Club {} successfully created'.format(club.name), 'form-success')
     return render_template('club/new_club.html', form=form)
 

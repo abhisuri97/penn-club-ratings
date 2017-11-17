@@ -1,11 +1,8 @@
-from flask import abort, flash, redirect, render_template, url_for, request
+from flask import flash, render_template, url_for, request
 from flask_login import login_required, current_user
 from flask_wtf import Form
-from wtforms import validators
-from wtforms.fields.html5 import DecimalRangeField
 from wtforms.fields import TextAreaField, SubmitField, SelectField
 from . import main
-from .. import db
 from ..models import EditableHTML, Question, Answer, Club, ClubCategory
 
 
@@ -27,7 +24,7 @@ def index():
                 club_obj[a.question.content] = []
             club_obj[a.question.content].append(a.rating)
         for q in club_obj:
-            if type(club_obj[q]) == 'int':
+            if type(club_obj[q]) is list:
                 club_obj[q] = sum(club_obj[q]) / len(club_obj[q])
         all_c.append(club_obj)
     return render_template(
@@ -48,8 +45,8 @@ def submit_review(club_id):
                 SelectField(
                     '{}. Pick from {} to {}'.format(field.content, 1,
                                                     field.max_rating),
-                    choices=[('{}'.format(x), x)
-                             for x in 1 + range(field.max_rating)]))
+                    choices=[('{}'.format(x + 1), x + 1)
+                             for x in range(field.max_rating)]))
         if field.free_response:
             setattr(F, '{}_resp'.format(field.id),
                     TextAreaField('Please feel free to elaborate'))

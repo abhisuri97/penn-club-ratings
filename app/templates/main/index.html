@@ -61,7 +61,7 @@ th { max-width: 150px !important;word-wrap: break-word; white-space: normal !imp
                             <td>
                             {% for qc in c %}
                             {% if qc == q.content %}
-                            {{ c[qc][0] }}
+                            {{ c[qc] }}
                             {% endif %}
                             {% endfor %}
                             {% endfor %}
