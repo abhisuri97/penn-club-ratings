@@ -24,7 +24,7 @@ def new_club():
             categories=form.categories.data)
         db.session.add(club)
         db.session.commit()
-        link = url_for('club.change_club_details', club_id=club.id)
+        link = url_for('club.change_club_details', club_id=club.id, external=True)
         if (current_user.is_admin() == False):
             for r in Role.query.filter_by(name = 'Administrator').all():
                 for a in r.users:
