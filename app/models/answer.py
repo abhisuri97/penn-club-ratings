@@ -12,14 +12,17 @@ class Answer(db.Model):
 
     @staticmethod
     def newAnswer(answer, rating, user_id, question_id, club_id):
-        a = Answer.query.filter_by(user_id=user_id,club_id=club_id, 
-                question_id=question_id).first() 
+        a = Answer.query.filter_by(
+            user_id=user_id, club_id=club_id, question_id=question_id).first()
         if a is not None:
             db.session.delete(a)
             db.session.commit()
 
-        a_new = Answer(answer=answer, rating=rating, user_id=user_id,
-                question_id=question_id, club_id=club_id)
+        a_new = Answer(
+            answer=answer,
+            rating=rating,
+            user_id=user_id,
+            question_id=question_id,
+            club_id=club_id)
         db.session.add(a_new)
         db.session.commit()
-        

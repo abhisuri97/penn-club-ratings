@@ -14,10 +14,13 @@ class NewClubForm(Form):
         'Add categories for club',
         validators=[InputRequired()],
         get_label='category_name',
-        query_factory=lambda: db.session.query(ClubCategory).order_by('category_name'))
+        query_factory=
+        lambda: db.session.query(ClubCategory).order_by('category_name'))
     submit = SubmitField('Create Club')
 
+
 class EditClubForm(NewClubForm):
-    is_confirmed = SelectField('Please indicate whether this club entry should be shown',
-            choices=[('True', 'Yes'), ('False', 'No')])
+    is_confirmed = SelectField(
+        'Please indicate whether this club entry should be shown',
+        choices=[('True', 'Yes'), ('False', 'No')])
     submit = SubmitField('Create')

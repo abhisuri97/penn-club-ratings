@@ -15,12 +15,11 @@ def new_category():
     """Create a new category."""
     form = NewClubCategoryForm()
     if form.validate_on_submit():
-        category = ClubCategory(
-            category_name=form.category_name.data)
+        category = ClubCategory(category_name=form.category_name.data)
         db.session.add(category)
         db.session.commit()
-        flash('ClubCategory {} successfully created'.format(category.category_name),
-              'form-success')
+        flash('ClubCategory {} successfully created'.format(
+            category.category_name), 'form-success')
     return render_template('category/new_category.html', form=form)
 
 
@@ -30,8 +29,7 @@ def new_category():
 def categories():
     """View all registered users."""
     categories = ClubCategory.query.all()
-    return render_template(
-        'category/categories.html', categories=categories)
+    return render_template('category/categories.html', categories=categories)
 
 
 @category.route('/<int:category_id>')
@@ -44,7 +42,8 @@ def category_info(category_id):
     return render_template('category/manage_category.html', category=category)
 
 
-@category.route('/<int:category_id>/change-category-details', methods=['GET', 'POST'])
+@category.route(
+    '/<int:category_id>/change-category-details', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def change_category_details(category_id):
@@ -58,7 +57,8 @@ def change_category_details(category_id):
         db.session.commit()
         flash('ClubCategory successfully edited', 'form-success')
     form.category_name.data = category.category_name
-    return render_template('category/manage_category.html', category=category, form=form)
+    return render_template(
+        'category/manage_category.html', category=category, form=form)
 
 
 @category.route('/<int:category_id>/delete')
@@ -80,5 +80,6 @@ def delete_category(category_id):
     category = ClubCategory.query.filter_by(id=category_id).first()
     db.session.delete(category)
     db.session.commit()
-    flash('Successfully deleted category %s.' % category.category_name, 'success')
+    flash('Successfully deleted category %s.' % category.category_name,
+          'success')
     return redirect(url_for('category.categories'))

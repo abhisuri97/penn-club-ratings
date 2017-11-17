@@ -35,8 +35,7 @@ def new_question():
 def questions():
     """View all registered users."""
     questions = Question.query.all()
-    return render_template(
-        'question/questions.html', questions=questions)
+    return render_template('question/questions.html', questions=questions)
 
 
 @question.route('/<int:question_id>')
@@ -51,7 +50,8 @@ def question_info(question_id):
     return render_template('question/manage_question.html', question=question)
 
 
-@question.route('/<int:question_id>/change-question-details', methods=['GET', 'POST'])
+@question.route(
+    '/<int:question_id>/change-question-details', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def change_question_details(question_id):
@@ -70,7 +70,8 @@ def change_question_details(question_id):
     form.content.data = question.content
     form.max_rating.data = question.max_rating
     form.free_response.data = str(question.free_response)
-    return render_template('question/manage_question.html', question=question, form=form)
+    return render_template(
+        'question/manage_question.html', question=question, form=form)
 
 
 @question.route('/<int:question_id>/delete')

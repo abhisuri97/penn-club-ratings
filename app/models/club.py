@@ -1,10 +1,10 @@
 from .. import db
 
-
 club_category_assoc = db.Table('club_category_association', db.Model.metadata,
-        db.Column('club_id', db.Integer, db.ForeignKey('clubs.id')),
-        db.Column('club_category_id', db.Integer, db.ForeignKey('club_categories.id'))
-        )
+                               db.Column('club_id', db.Integer,
+                                         db.ForeignKey('clubs.id')),
+                               db.Column('club_category_id', db.Integer,
+                                         db.ForeignKey('club_categories.id')))
 
 
 class Club(db.Model):
@@ -13,7 +13,8 @@ class Club(db.Model):
     name = db.Column(db.String(1000))
     description = db.Column(db.Text)
     is_confirmed = db.Column(db.Boolean)
-    categories = db.relationship('ClubCategory', secondary=club_category_assoc, backref='clubs')
+    categories = db.relationship(
+        'ClubCategory', secondary=club_category_assoc, backref='clubs')
     answers = db.relationship('Answer', backref='club')
 
 

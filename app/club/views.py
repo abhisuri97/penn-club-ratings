@@ -22,8 +22,7 @@ def new_club():
             categories=form.categories.data)
         db.session.add(club)
         db.session.commit()
-        flash('Club {} successfully created'.format(club.name),
-              'form-success')
+        flash('Club {} successfully created'.format(club.name), 'form-success')
     return render_template('club/new_club.html', form=form)
 
 
@@ -33,8 +32,7 @@ def new_club():
 def clubs():
     """View all registered users."""
     clubs = Club.query.all()
-    return render_template(
-        'club/clubs.html', clubs=clubs)
+    return render_template('club/clubs.html', clubs=clubs)
 
 
 @club.route('/<int:club_id>')
@@ -65,8 +63,8 @@ def change_club_details(club_id):
         flash('Club successfully edited', 'form-success')
     form.name.data = club.name
     form.categories.data = club.categories
-    form.desc.data  = club.description
-    form.is_confirmed.data  = str(club.is_confirmed)
+    form.desc.data = club.description
+    form.is_confirmed.data = str(club.is_confirmed)
     return render_template('club/manage_club.html', club=club, form=form)
 
 
