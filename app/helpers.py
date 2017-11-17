@@ -3,4 +3,3 @@ def bool(str):
         return True
     if str == 'False':
         return False
-

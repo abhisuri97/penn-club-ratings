@@ -1,54 +1,40 @@
 {% extends 'layouts/base.html' %}
 {% import 'macros/form_macros.html' as f %}
 
-{% set deletion_endpoint = 'club.delete_club_request' %}
+{% set deletion_endpoint = 'category.delete_category_request' %}
 
 {% set endpoints = [
-    ('club.club_info', 'Club information', 'false'),
-    ('club.change_club_details', 'Change club details', 'true'),
-    (deletion_endpoint, 'Delete club', 'true')
+    ('category.category_info', 'Question information'),
+    ('category.change_category_details', 'Change category details'),
+    (deletion_endpoint, 'Delete category')
 ] %}
 
 {% macro navigation(items) %}
     <div class="ui vertical fluid secondary menu">
-        {% for route, name, is_admin in items %}
-          {% set disp = True %}
-          {% if is_admin == 'true' and current_user.is_admin() == False %}
-          {% set disp = False %}
-          {% endif %}
-          {% if disp == True %}
-          {% set href = url_for(route, club_id=club.id) %}
+        {% for route, name in items %}
+            {% set href = url_for(route, category_id=category.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
-               {{ name }}
+                {{ name }}
             </a>
-          {% endif %}
         {% endfor %}
     </div>
 {% endmacro %}
 
-{% macro club_info(club) %}
+{% macro category_info(category) %}
     <table class="ui compact definition table">
-      <tr><td>Name</td><td>{{ club.name }}</td></tr>
-      <tr><td>Categories</td><td>{% for c in club.categories %} {{ c.category_name }} {% endfor %}</td></tr>
+      <tr><td>Clubs</td><td>{% for c in category.clubs %} {{ c.name }} {% endfor %}</td></tr>
       <div style="overflow-x: scroll;">
         <table class="ui searchable sortable unstackable selectable celled table">
           <thead>
             <tr>
-              <th>Answer</th>
-              <th>Rating</th>
-              <th>Question</th>
-              {% if current_user.is_admin() %}<th>Delete?</th>{% endif %}
+              <th>Club Name Associated With Category</th>
             </tr>
           </thead>
           <tbody>
-            {% for a in club.answers | sort(attribute='id') %}
-              <td>{{ a.answer }}</td>
-              <td>{{ a.rating }}</td>
-              <td>{{ a.question.content }}</td>
-              {% if current_user.is_admin() %}
-              <td onclick="window.location.href = '{{ url_for('question.delete_answer', answer_id=a.id) }}';">
-                <a>Delete Answer</a></td> {% endif %}
-              </tr>
+            {% for c in category.clubs | sort(attribute='id') %}
+            <tr>
+              <td>{{ c.name }}</td>
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -61,24 +47,14 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-          {% if current_user.is_admin() %}
-            <a class="ui basic compact button" href="{{ url_for('club.clubs') }}">
+            <a class="ui basic compact button" href="{{ url_for('category.categories') }}">
                 <i class="caret left icon"></i>
-                Back to all clubs
+                Back to all categories
             </a>
-            {% else %}
-            <a class="ui basic compact button" href="{{ url_for('main.index') }}">
-                <i class="caret left icon"></i>
-                Back to all club ratings
-            </a>
-            {% endif %}
             <h2 class="ui header">
-                {{ club.name }}
-                <div class="sub header">View {% if current_user.is_admin() %}and manage{% endif %} this club.</div>
+                {{ category.category_name }}
+                <div class="sub header">View and manage this category.</div>
             </h2>
-            <h3 style="text-align: center">
-                <a href="{{ url_for('main.submit_review', club_id=club.id ) }}">Add a review for this club</a>
-            </h3>
         </div>
         <div class="stretched divided very relaxed row">
             <div class="four wide column">
@@ -91,8 +67,8 @@
                         <div class="content">
                             This action is permanent
                             <div class="sub header">
-                                Deleting a club is not a reversible change. Any information associated
-                                with this club will be removed, and cannot be recovered.
+                                Deleting a category is not a reversible change. Any information associated
+                                with this category will be removed, and cannot be recovered.
                             </div>
                         </div>
                     </h3>
@@ -105,14 +81,14 @@
                             </div>
                         </div>
                         <a class="ui disabled negative deletion button">
-                            Delete this club
+                            Delete this category
                         </a>
                     </div>
                     </div>
                 {% elif form %}
                     {{ f.render_form(form) }}
                 {% else %}
-                    {{ club_info(club) }}
+                    {{ category_info(category) }}
                 {% endif %}
             </div>
         </div>
@@ -122,7 +98,7 @@
         $('.deletion.checkbox').checkbox({
             onChecked: function() {
                 $('.deletion.button').removeClass('disabled')
-                        .attr('href', '{{ url_for('club.delete_club', club_id=club.id) }}');
+                        .attr('href', '{{ url_for('category.delete_category', category_id=category.id) }}');
             },
             onUnchecked: function() {
                 $('.deletion.button').addClass('disabled').removeAttr('href');

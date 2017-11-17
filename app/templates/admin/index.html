@@ -47,6 +47,12 @@
                 {{ dashboard_option('Add New Club', 'club.new_club',
                                     description='Create a new club', icon='add icon') }}
             </div>
+            <div class="ui two column stackable grid">
+                {{ dashboard_option('All Categories for Clubs', 'category.categories',
+                                    description='View and manage club categories', icon='list icon') }}
+                {{ dashboard_option('Add New Club Categories', 'category.new_category',
+                                    description='Create a new club category', icon='add icon') }}
+            </div>
         </div>
     </div>
 {% endblock %}

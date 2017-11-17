@@ -11,6 +11,8 @@ class Club(db.Model):
     __tablename__ = 'clubs'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1000))
+    description = db.Column(db.Text)
+    is_confirmed = db.Column(db.Boolean)
     categories = db.relationship('ClubCategory', secondary=club_category_assoc, backref='clubs')
     answers = db.relationship('Answer', backref='club')
 

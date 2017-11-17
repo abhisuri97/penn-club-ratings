@@ -76,4 +76,8 @@ def create_app(config_name):
 
     from .question import question as question_blueprint
     app.register_blueprint(question_blueprint, url_prefix='/question')
+
+    from .category import category as category_blueprint
+    app.register_blueprint(category_blueprint, url_prefix='/category')
+
     return app

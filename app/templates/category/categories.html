@@ -8,9 +8,9 @@
                 Back to dashboard
             </a>
             <h2 class="ui header">
-                All Clubs
+                All Categories
                 <div class="sub header">
-                    View and manage current clubs
+                    View and manage current categories for clubs
                 </div>
             </h2>
 
@@ -29,18 +29,16 @@
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
                         <tr>
-                            <th>Club Name</th>
-                            <th>Categories</th>
-                            <th>Showing in Public?</th>
+                            <th>Category Name</th>
+                            <th>Clubs Associated with Category</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for c in clubs %}
-                        <tr onclick="window.location.href = '{{ url_for('club.club_info', club_id=c.id) }}';">
+                    {% for c in categories %}
+                        <tr onclick="window.location.href = '{{ url_for('category.category_info', category_id=c.id) }}';">
 
-                            <td>{{ c.name }}</td>
-                            <td>{% for c in c.categories %} {{ c.category_name }} {% endfor %}</td>
-                            <td {% if c.is_confirmed == False %}style="background-color: rgba(255, 0, 0, 0.8)"{% endif %}>{{ c.is_confirmed }}</td>
+                            <td>{{ c.category_name }}</td>
+                            <td>{% for cl in c.clubs %} {{ cl.name }}, {% endfor %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

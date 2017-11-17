@@ -1,17 +1,113 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <div class="ui text container">
-      <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }} {% endif %},</h1>
+    <div class="ui stackable grid container">
+        <div class="sixteen wide tablet sixteen wide computer centered column">
+            <a class="ui basic compact button" href="{{ url_for('club.new_club') }}">
+                Suggest a Club
+                <i class="caret right icon"></i>
+            </a>
+            <h2 class="ui header">
+                Club Ratings
+            </h2>
 
-        <p>This is <a href="http://hack4impact.org">Hack4Impact</a>'s web application template. We'll use this as a
-        foundation for each of our <a href="http://flask.pocoo.org">Flask</a> projects. The goal is to reduce the work
-        necessary to get a new project off the ground, by providing boilerplate code (such as account management
-        facilities), as well as uncontroversial and extensible defaults. We have integrated an
-        <a href="http://sass-lang.com">SCSS</a>-based asset pipeline based around a (fantastic!) framework
-        called <a href="http://semantic-ui.com">Semantic UI</a>. Much of this code is appropriated from the examples
-        in Miguel Grinberg's book, <a href="http://flaskbook.com"><em>Flask Web Development</em></a>.</p>
+            <div class="ui menu">
+                <div id="select-category" class="ui dropdown item">
+                    <div class="text">
+                        All club types
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-value="">All club types</div>
+                        {% for c in categories %}
+                            <div class="item" data-value="{{ c.category_name }}">{{ c.category_name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="ui right search item">
+                    <div class="ui transparent icon input">
+                        <input id="search-clubs" type="text" placeholder="Search clubs…">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
 
-        <p>{{ lipsum(6) }}</p>
+            {# Use overflow-x: scroll so that mobile views don't freak out
+             # when the table is too wide #}
+<style>
+th { max-width: 150px !important;word-wrap: break-word; white-space: normal !important; }
+</style>
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th>Club Name</th>
+                            <th>Club Categories</th>
+                            <th>Club Description</th>
+                            {% for q in questions %}
+                            <th>{{ q.content }} (max: {{q.max_rating}})</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in all_c %}
+                        <tr onclick="window.location.href ='{{ url_for('club.club_info', club_id=c.id) }}';">
+
+                            <td>{{ c.name }}</td>
+                            <td>{% for c in c.categories %}<div class="ui label"> {{ c.category_name }} </div> <br>{% endfor %}</td>
+                            
+                            <td>{{ c.description }}</td>
+                            {% for q in questions %}
+                            <td>
+                            {% for qc in c %}
+                            {% if qc == q.content %}
+                            {{ c[qc][0] }}
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+          console.log('hello')
+            $('#search-clubs').keyup(function () {
+                console.log("HI")
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
+                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
+                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
+                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                } else {
+                    $('td.positive').removeClass('positive');
+                    $('tr.hidden').removeClass('hidden').show();
+                }
+            });
+
+            $('#select-category').dropdown({
+                onChange: function (value, text, $selectedItem) {
+                  console.log("HI")
+                  var searchText = value
+                  console.log(value)
+                  if (searchText.length > 0) {
+                  $('tbody td:icontains(' + searchText + ')').addClass('positive');
+                  $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
+                  $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
+                  $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                  } else {
+                  $('td.positive').removeClass('positive');
+                  $('tr.hidden').removeClass('hidden').show();
+                }
+                }
+            });
+        });
+    </script>
+ 
 {% endblock %}

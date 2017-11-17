@@ -1,22 +1,24 @@
 from flask import abort, flash, redirect, render_template, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 
-from .forms import (NewClubForm)
+from .forms import (NewClubForm, EditClubForm)
 from . import club
 from .. import db
 from ..decorators import admin_required
 from ..models import Club
+from ..helpers import bool
 
 
 @club.route('/new-club', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def new_club():
     """Create a new club."""
     form = NewClubForm()
     if form.validate_on_submit():
         club = Club(
             name=form.name.data,
+            description=form.desc.data,
+            is_confirmed=current_user.is_admin(),
             categories=form.categories.data)
         db.session.add(club)
         db.session.commit()
@@ -38,7 +40,7 @@ def clubs():
 @club.route('/<int:club_id>')
 @club.route('/<int:club_id>/info')
 @login_required
-@admin_required
+# @admin_required
 def club_info(club_id):
     """View a club."""
     club = Club.query.filter_by(id=club_id).first()
@@ -52,15 +54,19 @@ def change_club_details(club_id):
     club = Club.query.filter_by(id=club_id).first()
     if club is None:
         abort(404)
-    form = NewClubForm()
+    form = EditClubForm()
     if form.validate_on_submit():
         club.name = form.name.data
+        club.description = form.desc.data
         club.categories = form.categories.data
+        club.is_confirmed = bool(form.is_confirmed.data)
         db.session.add(club)
         db.session.commit()
         flash('Club successfully edited', 'form-success')
     form.name.data = club.name
     form.categories.data = club.categories
+    form.desc.data  = club.description
+    form.is_confirmed.data  = str(club.is_confirmed)
     return render_template('club/manage_club.html', club=club, form=form)
 
 

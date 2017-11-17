@@ -8,15 +8,13 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
-            <a class="ui basic compact button" 
-               {% if current_user.is_admin() %} href="{{ url_for('admin.index') }}"
-              {% else %} href="{{ url_for('main.index') }}" {%endif %}>
+            <a class="ui basic compact button" href="{{ url_for('main.index') }}">
                 <i class="caret left icon"></i>
                 Back to dashboard
             </a>
             <h2 class="ui header">
-                Add New Club
-                <div class="sub header">Create a new club</div>
+                Add New Club Review
+                <div class="sub header">Create a new club review</div>
             </h2>
 
             {% set flashes = {
