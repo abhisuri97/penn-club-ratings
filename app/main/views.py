@@ -34,7 +34,7 @@ def submit_review(club_id):
         pass
     for field in Question.query.all():
         setattr(F, '{}_q'.format(field.id), 
-            SelectField('{}. Pick from {} to {}'.format(field.content, 1, field.max_rating), choices=[('{}'.format(x), x) for x in range(field.max_rating)]))
+            SelectField('{}. Pick from {} to {}'.format(field.content, 1, field.max_rating), choices=[('{}'.format(x), x) for x in 1+range(field.max_rating)]))
         if field.free_response:
             setattr(F, '{}_resp'.format(field.id),TextAreaField('Please feel free to elaborate'))
     setattr(F, 'submit', SubmitField('Submit Rating'))
