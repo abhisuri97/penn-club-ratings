@@ -7,7 +7,7 @@ from .forms import (NewClubForm, EditClubForm)
 from . import club
 from .. import db
 from ..decorators import admin_required
-from ..models import Club, User, Role
+from ..models import Club, Role
 from ..helpers import bool
 
 
@@ -35,7 +35,7 @@ def new_club():
                             template='club/email/suggested_club', 
                             club=club, 
                             link=link)
-        flash('Club {} successfully created'.format(club.name), 'form-success')
+        flash('Club {} successfully {} {}'.format(club.name), 'form-success')
     return render_template('club/new_club.html', form=form)
 
 
