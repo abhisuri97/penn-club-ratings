@@ -24,19 +24,22 @@ def new_club():
             categories=form.categories.data)
         db.session.add(club)
         db.session.commit()
-        link = url_for('club.change_club_details', club_id=club.id, _external=True)
+        link = url_for(
+            'club.change_club_details', club_id=club.id, _external=True)
         if (current_user.is_admin() == False):
-            for r in Role.query.filter_by(name = 'Administrator').all():
+            for r in Role.query.filter_by(name='Administrator').all():
                 for a in r.users:
                     get_queue().enqueue(
-                            send_email,
-                            recipient=a.email,
-                            subject='A new club was suggested by {}'.format(current_user.first_name), 
-                            template='club/email/suggested_club', 
-                            club=club, 
-                            link=link)
+                        send_email,
+                        recipient=a.email,
+                        subject='A new club was suggested by {}'.format(
+                            current_user.first_name),
+                        template='club/email/suggested_club',
+                        club=club,
+                        link=link)
         action = 'created' if current_user.is_admin() else 'suggested'
-        flash('Club {} successfully {}'.format(club.name, action), 'form-success')
+        flash('Club {} successfully {}'.format(club.name, action),
+              'form-success')
     return render_template('club/new_club.html', form=form)
 
 
