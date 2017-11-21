@@ -104,5 +104,5 @@ def delete_club(club_id):
     club = Club.query.filter_by(id=club_id).first()
     db.session.delete(club)
     db.session.commit()
-    flash('Successfully deleted club %s.' % club.content, 'success')
+    flash('Successfully deleted club %s.' % club.name, 'success')
     return redirect(url_for('club.clubs'))
