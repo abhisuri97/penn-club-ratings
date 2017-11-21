@@ -20,9 +20,10 @@ def index():
             'categories': c.categories
         }
         for a in c.answers:
-            if a.question.content not in club_obj:
-                club_obj[a.question.content] = []
-            club_obj[a.question.content].append(a.rating)
+            if a.question is not None:
+                if a.question.content not in club_obj:
+                    club_obj[a.question.content] = []
+                club_obj[a.question.content].append(a.rating)
         for q in club_obj:
             if type(club_obj[q]) is list:
                 club_obj[q] = sum(club_obj[q]) / len(club_obj[q])
