@@ -55,7 +55,6 @@ def clubs():
 @club.route('/<int:club_id>')
 @club.route('/<int:club_id>/info')
 @login_required
-# @admin_required
 def club_info(club_id):
     """View a club."""
     club = Club.query.filter_by(id=club_id).first()

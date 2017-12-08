@@ -37,6 +37,7 @@
               <th>Answer</th>
               <th>Rating</th>
               <th>Question</th>
+              <th>Flag Answer</th>
               {% if current_user.is_admin() %}<th>Delete?</th>{% endif %}
             </tr>
           </thead>
@@ -45,6 +46,7 @@
               <td>{{ a.answer }}</td>
               <td>{{ a.rating }}</td>
               <td>{{ a.question.content }}</td>
+              <td><a href="{{ url_for('question.flag_answer', answer_id=a.id) }}">Flag Response</a></td>
               {% if current_user.is_admin() %}
               <td onclick="window.location.href = '{{ url_for('question.delete_answer', answer_id=a.id) }}';">
                 <a>Delete Answer</a></td> {% endif %}

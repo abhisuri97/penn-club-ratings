@@ -1,0 +1,13 @@
+Hello Administrator,
+
+An answer was recently flagged. The following is the content of the answer:
+
+{{ answer.answer }}
+
+Click here to delete it:
+
+{{ link }}
+
+From,
+
+The Signal & Hack4Impact

@@ -1,11 +1,14 @@
 from flask import abort, flash, redirect, render_template, url_for, request
-from flask_login import login_required
+from flask_login import login_required, current_user
+
+from flask_rq import get_queue
+from ..email import send_email
 
 from .forms import NewQuestionForm
 from . import question
 from .. import db
 from ..decorators import admin_required
-from ..models import Question, Answer
+from ..models import Question, Answer, Role
 
 from ..helpers import bool
 # All stuff dealing with adding, editing, and removing questions
@@ -102,7 +105,28 @@ def delete_question(question_id):
 @admin_required
 def delete_answer(answer_id):
     answer = Answer.query.filter_by(id=answer_id).first()
+    club = answer.club.id
     db.session.delete(answer)
     db.session.commit()
     flash('Successfully deleted answer', 'success')
-    return redirect(request.referrer)
+    return redirect(url_for('club.club_info', club_id=club))
+
+
+@question.route('/answer/<int:answer_id>/flag')
+@login_required
+def flag_answer(answer_id):
+    answer = Answer.query.filter_by(id=answer_id).first()
+    link = url_for(
+            'question.delete_answer', answer_id=answer.id, _external=True)
+    for r in Role.query.filter_by(name='Administrator').all():
+        for a in r.users:
+            get_queue().enqueue(
+                    send_email,
+                    recipient=a.email,
+                    subject='A new answer report was issued by {}'.format(
+                        current_user.first_name),
+                    template='question/email/flag',
+                    answer=answer,
+                    link=link)
+    flash('Successfully submitted report', 'success')
+    return redirect(url_for('club.club_info', club_id=answer.club.id))
