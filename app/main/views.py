@@ -1,7 +1,7 @@
 from flask import flash, render_template, url_for, request
 from flask_login import login_required, current_user
 from flask_wtf import Form
-from wtforms.fields import TextAreaField, SubmitField, SelectField
+from wtforms.fields import TextAreaField, SubmitField, SelectField, DecimalField
 from . import main
 from ..models import EditableHTML, Question, Answer, Club, ClubCategory
 
@@ -16,6 +16,7 @@ def index():
         club_obj = {
             'id': c.id,
             'description': c.description,
+            'img_link': c.img_link,
             'name': c.name,
             'categories': c.categories
         }
@@ -42,12 +43,19 @@ def submit_review(club_id):
         pass
 
     for field in Question.query.all():
-        setattr(F, '{}_q'.format(field.id),
-                SelectField(
-                    '{}. Pick from {} to {}'.format(field.content, 1,
-                                                    field.max_rating),
-                    choices=[('{}'.format(x + 1), x + 1)
-                             for x in range(field.max_rating)]))
+        if field.type == 'Rating':
+            setattr(F, '{}_q'.format(field.id),
+                    SelectField(
+                        '{}. Pick from {} to {}'.format(field.content, 1,
+                                                        5),
+                        description=field.description,
+                        choices=[('{}'.format(x + 1), x + 1)
+                                 for x in range(5)]))
+        elif field.type == 'Numerical':
+            setattr(F, '{}_q'.format(field.id),
+                    DecimalField(
+                        '{}'.format(field.content),
+                        description=field.description))
         if field.free_response:
             setattr(F, '{}_resp'.format(field.id),
                     TextAreaField('Please feel free to elaborate'))

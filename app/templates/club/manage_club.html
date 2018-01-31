@@ -16,6 +16,9 @@
           {% if is_admin == 'true' and current_user.is_admin() == False %}
           {% set disp = False %}
           {% endif %}
+          {% if is_admin == 'true' and current_user.id == club.admin_id %}
+          {% set disp = True %}
+          {% endif %}
           {% if disp == True %}
           {% set href = url_for(route, club_id=club.id) %}
             <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
@@ -29,23 +32,25 @@
 {% macro club_info(club) %}
     <table class="ui compact definition table">
       <tr><td>Name</td><td>{{ club.name }}</td></tr>
+      <tr><td>Website</td><td>{{ club.website }}</td></tr>
+      <tr><td>Image</td><td><img src="{{ club.img_link }}" width="100%"></td></tr>
+      <tr><td>Description</td><td>{{ club.description }}</td></tr>
+      <tr><td>Recruitment Info</td><td>{{ club.recruitment_info }}</td></tr>
       <tr><td>Categories</td><td>{% for c in club.categories %} {{ c.category_name }} {% endfor %}</td></tr>
       <div style="overflow-x: scroll;">
         <table class="ui searchable sortable unstackable selectable celled table">
           <thead>
             <tr>
-              <th>Answer</th>
-              <th>Rating</th>
               <th>Question</th>
+              <th>Anwer</th>
               <th>Flag Answer</th>
               {% if current_user.is_admin() %}<th>Delete?</th>{% endif %}
             </tr>
           </thead>
           <tbody>
             {% for a in club.answers | sort(attribute='id') %}
-              <td>{{ a.answer }}</td>
-              <td>{{ a.rating }}</td>
               <td>{{ a.question.content }}</td>
+              <td>{{ a.rating }}{% if a.answer %} ( {{ a.answer }} ){% endif %}</td>
               <td><a href="{{ url_for('question.flag_answer', answer_id=a.id) }}">Flag Response</a></td>
               {% if current_user.is_admin() %}
               <td onclick="window.location.href = '{{ url_for('question.delete_answer', answer_id=a.id) }}';">

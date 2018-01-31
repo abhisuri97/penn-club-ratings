@@ -30,3 +30,95 @@ nav .mobile.only.row {
 table.selectable tr:hover {
     cursor: pointer !important;
 }
+
+body > * {
+    margin-bottom: 30px;
+}
+
+.ui.menu {
+    border: none;
+    box-shadow: none;
+}
+ui.stackable.grid.container {
+  padding-top: 30px;
+}
+.ui.inverted.menu {
+  background-color: #FFF !important;
+  .item {
+    color: #666 !important
+  }
+  .item:hover {
+    color: #000
+  }
+  .item.active {
+    border-left-width: 0px !important;
+    color: #666 !important
+  }
+  
+}
+
+.ui.fixed.main.menu .right.menu > .item:last-of-type {
+  border-right: 0px !important;
+}
+
+.ui.menu .active.item {
+    background: none;
+
+    text-decoration: underline;
+}
+
+.signal.menu {
+    color: #8a8a8a;
+
+    font-weight: bold;
+    font-size: 24px;
+
+
+    margin-bottom: 30px;
+}
+
+.ui.card, .ui.cards > .card {
+    width: 360px;
+    min-height: 150px;
+    max-height: 500px; 
+    overflow: hidden;
+    border-radius: 16px !important;
+    box-shadow: 0 0 30px 2px #e0e0e0;
+}
+
+.ui.card > :first-child {
+    border-radius: 16px 16px 0 0 !important;
+}
+
+.ui.card > .image {
+    height: 200px;
+}
+
+.ui.card > .image > * {
+    object-fit: cover;
+
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.ui.card > .content {
+    margin-bottom: 10px;
+    max-height:200px;
+    overflow: scroll;
+}
+
+.ui.card > .extra {
+    margin-bottom: 10px;
+    max-height:200px;
+    overflow: scroll;
+    line-height: 15px;
+}
+
+.ui.card > .content > .header:not(.ui) {
+    font-size: 20px;
+}
+
+.ui.label {
+    background-color: #eeeeee;
+    margin: 2px;
+}

@@ -23,7 +23,7 @@
 {% macro question_info(question) %}
     <table class="ui compact definition table">
       <tr><td>Content</td><td>{{ question.content }}</td></tr>
-      <tr><td>Max Rating</td><td>{{ question.max_rating }}</td></tr>
+      <tr><td>Type</td><td>{{ question.type }}</td></tr>
       <tr><td>Optional Response?</td><td>{{ question.free_response|e }}</td></tr>
       <div style="overflow-x: scroll;">
         <table class="ui searchable sortable unstackable selectable celled table">

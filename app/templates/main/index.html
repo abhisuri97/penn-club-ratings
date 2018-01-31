@@ -1,15 +1,19 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/components/icon.min.css" />
     <div class="ui stackable grid container">
         <div class="sixteen wide tablet sixteen wide computer centered column">
-            <a class="ui basic compact button" href="{{ url_for('club.new_club') }}">
+      <br><br>
+            <h2 class="ui header">
+                Club Ratings 
+            </h2>
+            <br>
+            <a class="" href="{{ url_for('club.new_club') }}">
                 Suggest a Club
                 <i class="caret right icon"></i>
             </a>
-            <h2 class="ui header">
-                Club Ratings
-            </h2>
+            <br><br>
 
             <div class="ui menu">
                 <div id="select-category" class="ui dropdown item">
@@ -24,7 +28,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="ui right search item">
+                <div class="ui search item">
                     <div class="ui transparent icon input">
                         <input id="search-clubs" type="text" placeholder="Search clubs…">
                         <i class="search icon"></i>
@@ -34,60 +38,60 @@
 
             {# Use overflow-x: scroll so that mobile views don't freak out
              # when the table is too wide #}
-<style>
-th { max-width: 150px !important;word-wrap: break-word; white-space: normal !important; }
-</style>
-            <div style="overflow-x: scroll;">
-                <table class="ui searchable sortable unstackable selectable celled table">
-                    <thead>
-                        <tr>
-                            <th>Club Name</th>
-                            <th>Club Categories</th>
-                            <th>Club Description</th>
-                            {% for q in questions %}
-                            <th>{{ q.content }} (max: {{q.max_rating}})</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for c in all_c %}
-                        <tr onclick="window.location.href ='{{ url_for('club.club_info', club_id=c.id) }}';">
-
-                            <td>{{ c.name }}</td>
-                            <td>{% for c in c.categories %}<div class="ui label"> {{ c.category_name }} </div> <br>{% endfor %}</td>
-                            
-                            <td>{{ c.description }}</td>
-                            {% for q in questions %}
-                            <td>
-                            {% for qc in c %}
-                            {% if qc == q.content %}
-                            {{ c[qc] }}
-                            {% endif %}
-                            {% endfor %}
-                            {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+             <br><br>
+<div class="ui stackable four column grid" id="res">
+  <div class="ui cards">
+    {% for c in all_c %}
+    <div class="ui card" id="card">
+      <div class="image">
+        <img src="{{ c.img_link }}">
+      </div>
+      <div class="content">
+        <a class="header" href="{{ url_for('club.club_info', club_id=c.id) }}">{{ c.name }}</a>
+        <div class="description">
+          {{ c.description }}
         </div>
+      </div>
+      <div class="extra">
+        {% for c in c.categories %}<div class="ui label"> {{ c.category_name }} </div> &nbsp; &nbsp;{% endfor %}
+        {% for q in questions %}
+        {% for qc in c %}
+        {% if qc == q.content %}
+        <a class="ui blue label">
+          <i class="{{ q.icon_name }} icon"></i>
+          {{ q.short_name }}
+          <div class="detail"> {{ c[qc] }}</div>
+        </a>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+      </div>
     </div>
+    {% endfor %}
+  </div>
+</div>
 
     <script type="text/javascript">
         $(document).ready(function () {
           console.log('hello')
             $('#search-clubs').keyup(function () {
-                console.log("HI")
                 var searchText = $(this).val();
                 if (searchText.length > 0) {
-                    $('tbody td:icontains(' + searchText + ')').addClass('positive');
-                    $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
-                    $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
-                    $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
+                    $('.cards').find('.card').each(function() {
+                      var t = $(this).text().toLowerCase()
+                      if (t.includes(searchText.toLowerCase())) {
+                        $(this).css('display', 'block');
+                        $(this).css('background-color', 'rgba(0, 240, 0, 0.2)')
+                      } else {
+                        $(this).css('display', 'none');
+                        $(this).css('background-color', '#FFF')
+                      }
+                    })
                 } else {
-                    $('td.positive').removeClass('positive');
-                    $('tr.hidden').removeClass('hidden').show();
+                  $('.cards').find('.card').each(function() {
+                    $(this).css('display', 'block');
+                    $(this).css('background-color', '#FFF')
+                  })
                 }
             });
 
@@ -96,14 +100,22 @@ th { max-width: 150px !important;word-wrap: break-word; white-space: normal !imp
                   console.log("HI")
                   var searchText = value
                   console.log(value)
-                  if (searchText.length > 0) {
-                  $('tbody td:icontains(' + searchText + ')').addClass('positive');
-                  $('td.positive').not(':icontains(' + searchText + ')').removeClass('positive');
-                  $('tbody td').not(':icontains(' + searchText + ')').closest('tr').addClass('hidden').hide();
-                  $('tr.hidden:icontains(' + searchText + ')').removeClass('hidden').show();
-                  } else {
-                  $('td.positive').removeClass('positive');
-                  $('tr.hidden').removeClass('hidden').show();
+                if (searchText.length > 0) {
+                    $('.cards').find('.card').each(function() {
+                      var t = $(this).text().toLowerCase()
+                      if (t.includes(searchText.toLowerCase())) {
+                        $(this).css('display', 'block');
+                        $(this).css('background-color', 'rgba(0, 240, 0, 0.2)')
+                      } else {
+                        $(this).css('display', 'none');
+                        $(this).css('background-color', '#FFF')
+                      }
+                    })
+                } else {
+                  $('.cards').find('.card').each(function() {
+                    $(this).css('display', 'block');
+                    $(this).css('background-color', '#FFF')
+                  })
                 }
                 }
             });

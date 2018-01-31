@@ -30,7 +30,7 @@
                     <thead>
                         <tr>
                             <th>Question</th>
-                            <th>Max Rating</th>
+                            <th>Type of response</th>
                             <th>Optional responses?</th>
                             <th>Number of responses to question</th>
                         </tr>
@@ -40,7 +40,7 @@
                         <tr onclick="window.location.href = '{{ url_for('question.question_info', question_id=q.id) }}';">
 
                             <td>{{ q.content }}</td>
-                            <td>{{ q.max_rating }}</td>
+                            <td>{{ q.type }}</td>
                             <td>{{ q.free_response|e }}</td>
                             <td>{{ q.answers|length }}</td>
                         </tr>

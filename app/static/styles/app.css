@@ -5,7 +5,7 @@ nav {
 
 @media -sass-debug-info{filename{}line{font-family:\0000312}}
 .ui.fixed.main.menu .right.menu > .item:last-of-type {
-  border-right: 1px solid rgba(34, 36, 38, 0.09804);
+  border-right: 1px solid rgba(34, 36, 38, 0.0980392);
 }
 
 @media -sass-debug-info{filename{}line{font-family:\0000318}}
@@ -22,4 +22,110 @@ nav .mobile.only.row .ui.vertical.menu {
 @media -sass-debug-info{filename{}line{font-family:\0000330}}
 table.selectable tr:hover {
   cursor: pointer !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000334}}
+body > * {
+  margin-bottom: 30px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000338}}
+.ui.menu {
+  border: none;
+  box-shadow: none;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000342}}
+ui.stackable.grid.container {
+  padding-top: 30px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000345}}
+.ui.inverted.menu {
+  background-color: #FFF !important;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000347}}
+.ui.inverted.menu .item {
+  color: #666 !important;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000350}}
+.ui.inverted.menu .item:hover {
+  color: #000;
+}
+@media -sass-debug-info{filename{}line{font-family:\0000353}}
+.ui.inverted.menu .item.active {
+  border-left-width: 0px !important;
+  color: #666 !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000360}}
+.ui.fixed.main.menu .right.menu > .item:last-of-type {
+  border-right: 0px !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000364}}
+.ui.menu .active.item {
+  background: none;
+  text-decoration: underline;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000370}}
+.signal.menu {
+  color: #8a8a8a;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000380}}
+.ui.card, .ui.cards > .card {
+  width: 360px;
+  min-height: 150px;
+  max-height: 500px;
+  overflow: hidden;
+  border-radius: 16px !important;
+  box-shadow: 0 0 30px 2px #e0e0e0;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000389}}
+.ui.card > :first-child {
+  border-radius: 16px 16px 0 0 !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000393}}
+.ui.card > .image {
+  height: 200px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\0000397}}
+.ui.card > .image > * {
+  object-fit: cover;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003104}}
+.ui.card > .content {
+  margin-bottom: 10px;
+  max-height: 200px;
+  overflow: scroll;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003110}}
+.ui.card > .extra {
+  margin-bottom: 10px;
+  max-height: 200px;
+  overflow: scroll;
+  line-height: 15px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003117}}
+.ui.card > .content > .header:not(.ui) {
+  font-size: 20px;
+}
+
+@media -sass-debug-info{filename{}line{font-family:\00003121}}
+.ui.label {
+  background-color: #eeeeee;
+  margin: 2px;
 }

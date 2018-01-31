@@ -23,7 +23,10 @@ def new_question():
     if form.validate_on_submit():
         question = Question(
             content=form.content.data,
-            max_rating=form.max_rating.data,
+            description=form.description.data,
+            icon_name=form.icon_name.data,
+            short_name=form.short_name.data,
+            type=form.type.data,
             free_response=bool(form.free_response.data))
         db.session.add(question)
         db.session.commit()
@@ -64,14 +67,19 @@ def change_question_details(question_id):
     form = NewQuestionForm()
     if form.validate_on_submit():
         question.content = form.content.data
-        question.max_rating = form.max_rating.data
-        print(bool(form.free_response.data))
+        question.description = form.description.data
+        question.type = form.type.data
+        question.icon_name = form.icon_name.data
+        question.short_name = form.short_name.data
         question.free_response = bool(form.free_response.data)
         db.session.add(question)
         db.session.commit()
         flash('Question successfully edited', 'form-success')
     form.content.data = question.content
-    form.max_rating.data = question.max_rating
+    form.type.data = question.type
+    form.icon_name.data = question.icon_name
+    form.short_name.data = question.short_name
+    form.description.data = question.description
     form.free_response.data = str(question.free_response)
     return render_template(
         'question/manage_question.html', question=question, form=form)

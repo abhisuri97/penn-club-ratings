@@ -12,6 +12,10 @@ class Club(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1000))
     description = db.Column(db.Text)
+    img_link = db.Column(db.Text)
+    website = db.Column(db.Text)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    recruitment_info = db.Column(db.Text)
     is_confirmed = db.Column(db.Boolean)
     categories = db.relationship(
         'ClubCategory', secondary=club_category_assoc, backref='clubs')

@@ -7,7 +7,7 @@ from .forms import (NewClubForm, EditClubForm)
 from . import club
 from .. import db
 from ..decorators import admin_required
-from ..models import Club, Role
+from ..models import Club, Role, User
 from ..helpers import bool
 
 
@@ -19,7 +19,10 @@ def new_club():
     if form.validate_on_submit():
         club = Club(
             name=form.name.data,
+            img_link=form.img_link.data,
+            website=form.website.data,
             description=form.desc.data,
+            recruitment_info=form.recruitment_info.data,
             is_confirmed=current_user.is_admin(),
             categories=form.categories.data)
         db.session.add(club)
@@ -54,7 +57,6 @@ def clubs():
 
 @club.route('/<int:club_id>')
 @club.route('/<int:club_id>/info')
-@login_required
 def club_info(club_id):
     """View a club."""
     club = Club.query.filter_by(id=club_id).first()
@@ -63,21 +65,32 @@ def club_info(club_id):
 
 @club.route('/<int:club_id>/change-club-details', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def change_club_details(club_id):
     club = Club.query.filter_by(id=club_id).first()
     if club is None:
         abort(404)
+    if (current_user.id != club.admin_id) and (current_user.is_admin() is False):
+        print(current_user.is_admin())
+        abort(403)
     form = EditClubForm()
     if form.validate_on_submit():
-        club.name = form.name.data
-        club.description = form.desc.data
+        club.name=form.name.data
+        club.img_link=form.img_link.data
+        club.website=form.website.data
+        print(form.owner.data)
+        club.admin_id=form.owner.data.id
+        club.description=form.desc.data
+        club.recruitment_info=form.recruitment_info.data
         club.categories = form.categories.data
         club.is_confirmed = bool(form.is_confirmed.data)
         db.session.add(club)
         db.session.commit()
         flash('Club successfully edited', 'form-success')
-    form.name.data = club.name
+    form.name.data=club.name
+    form.img_link.data=club.img_link
+    form.website.data=club.website
+    form.recruitment_info.data=club.recruitment_info
+    form.owner.data = User.query.get(club.admin_id) if club.admin_id else None
     form.categories.data = club.categories
     form.desc.data = club.description
     form.is_confirmed.data = str(club.is_confirmed)
