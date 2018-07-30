@@ -114,7 +114,7 @@ ui.stackable.grid.container {
 @media -sass-debug-info{filename{}line{font-family:\00003110}}
 .ui.card > .extra {
   margin-bottom: 10px;
-  max-height: 200px;
+  max-height: 100px;
   overflow: scroll;
   line-height: 15px;
 }
